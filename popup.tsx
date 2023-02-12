@@ -1,7 +1,21 @@
-import { useState } from "react";
+import { ChangeEventHandler, useState } from "react";
+
+import { sendToActiveContentScript } from "@plasmohq/messaging";
 
 function IndexPopup() {
   const [data, setData] = useState("");
+
+  const hadleInputChange: ChangeEventHandler<HTMLInputElement> = async (e) => {
+    setData(e.target.value);
+    const resp2 = await sendToActiveContentScript({
+      name: "ping",
+      body: {
+        searchText: e.target.value
+      }
+    });
+
+    console.log(resp2);
+  };
 
   return (
     <div
@@ -11,11 +25,7 @@ function IndexPopup() {
         padding: 16
       }}>
       <label htmlFor="searchInput">Search</label>
-      <input
-        id="searchInput"
-        onChange={(e) => setData(e.target.value)}
-        value={data}
-      />
+      <input id="searchInput" onChange={hadleInputChange} value={data} />
     </div>
   );
 }
