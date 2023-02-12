@@ -1,4 +1,5 @@
 import { ChangeEventHandler, useState } from "react";
+import type { SearchInput } from "types";
 
 import { sendToActiveContentScript } from "@plasmohq/messaging";
 
@@ -7,8 +8,8 @@ function IndexPopup() {
 
   const hadleInputChange: ChangeEventHandler<HTMLInputElement> = async (e) => {
     setData(e.target.value);
-    const resp2 = await sendToActiveContentScript({
-      name: "ping",
+    const resp2 = await sendToActiveContentScript<SearchInput>({
+      name: "searchInput",
       body: {
         searchText: e.target.value
       }
